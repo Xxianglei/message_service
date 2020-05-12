@@ -36,7 +36,7 @@ spring:
 # 日志打印
 logging:
   path: /data/logs/${spring.application.name}
-
+  file:  /data/admin-logs/output.log
 mybatis:
   type-aliases-package: com.xianglei.message_service.domain
 
