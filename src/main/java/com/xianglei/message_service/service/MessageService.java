@@ -11,7 +11,7 @@ public interface MessageService {
 
     String insertMessage(String message);
 
-    boolean checkMessage(String message, String flowId);
+    boolean checkMessage(String message);
 
     /**
      * 删除验证码

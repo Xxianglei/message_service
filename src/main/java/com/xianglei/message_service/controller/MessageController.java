@@ -53,10 +53,10 @@ public class MessageController {
     }
 
     @GetMapping("/checkMessage")
-    public BaseJson checkMessage(@RequestParam String code, @RequestParam String flowId) {
+    public BaseJson checkMessage(@RequestParam String code) {
         BaseJson baseJson = new BaseJson(false);
         try {
-            boolean flag = messageService.checkMessage(code, flowId);
+            boolean flag = messageService.checkMessage(code);
             if (flag) {
                 // 删除验证码
                 int result = messageService.deleteMessageCode(code);

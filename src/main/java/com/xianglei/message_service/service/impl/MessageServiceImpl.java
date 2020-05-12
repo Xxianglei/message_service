@@ -36,8 +36,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean checkMessage(String message, String flowId) {
-        BsMessage bsMessage = messageMapper.selectOne(new QueryWrapper<BsMessage>().eq("TX_ID", message).eq("FLOW_ID", flowId));
+    public boolean checkMessage(String message) {
+        BsMessage bsMessage = messageMapper.selectOne(new QueryWrapper<BsMessage>().eq("TX_ID", message));
         return bsMessage == null ? false : true;
     }
 
