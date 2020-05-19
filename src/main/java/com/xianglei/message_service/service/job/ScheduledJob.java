@@ -37,12 +37,12 @@ public class ScheduledJob {
 
     /**
      * 定时任务方法
-     * 每5分钟清理message表
+     * 每1分钟清理message表
      * LIFO
      *
      * @Scheduled:设置定时任务 cron属性：cron表达式。定时任务触发是时间的一个字符串表达形式
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void scheduledMessageMethod() throws Exception {
         logger.info("Scheduled定时清理过期消息，时间：{}", new Date());
         List<BsMessage> bsMessages = messageMapper.selectList(new QueryWrapper<BsMessage>().orderByAsc("CREATE_DATE"));
@@ -65,16 +65,18 @@ public class ScheduledJob {
         Date now = new Date();
         List<BsOrder> charge = orderMapper.selectList(new QueryWrapper<BsOrder>().eq("CHARGE", "0"));
         for (BsOrder bsOrder : charge) {
-            Date createTime = bsOrder.getCreateTime();
-            long nowTime = now.getTime();
-            long createTimeTime = createTime.getTime();
-            //转换到分钟级别
-            long nowTimeMill = nowTime / 1000 / 60;
-            long createTimeTimeMill = createTimeTime / 1000 / 60;
-            // 相差间隔三十分钟
-            if (nowTimeMill - createTimeTimeMill >= 30) {
-                bsOrder.setCharge("2");
-                orderMapper.updateById(bsOrder);
+            if(!bsOrder.getFlowId().endsWith("TEMP")){
+                Date createTime = bsOrder.getCreateTime();
+                long nowTime = now.getTime();
+                long createTimeTime = createTime.getTime();
+                //转换到分钟级别
+                long nowTimeMill = nowTime / 1000 / 60;
+                long createTimeTimeMill = createTimeTime / 1000 / 60;
+                // 相差间隔三十分钟
+                if (nowTimeMill - createTimeTimeMill >= 30) {
+                    bsOrder.setCharge("2");
+                    orderMapper.updateById(bsOrder);
+                }
             }
         }
     }
